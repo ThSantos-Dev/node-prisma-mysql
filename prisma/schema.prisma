@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Criando model de usuário
+model Usuario {
+  // Definindo um chave primária
+  id    Int    @id @unique @default(autoincrement())
+  email String @db.VarChar(70)
+  senha String @db.VarChar(20)
+
+  nome            String   @db.VarChar(120)
+  biografia       String?  @db.Text
+  data_nascimento DateTime @db.Date
+
+  // Definindo que um usuário pode ter um genero
+  // nome_de_controle Tabela @relation(fields: [campoDaModelAtual], references: [chavePrimariaDaOutraTabela])
+  genero Genero @relation(fields: [idGenero], references: [id]) //Fazendo relacionamento com a model Genero
+  cidade Cidade @relation(fields: [idCidade], references: [id])
+
+  idCidade Int
+  idGenero Int
+
+  // Definindo o nome da tabela no banco
+  @@map("tblusuario")
+}
+
+model Genero {
+  id Int @id @unique @default(autoincrement())
+
+  nome  String @db.VarChar(15)
+  sigla String @db.VarChar(1)
+
+  // Mostrando ao Prisma que há uma relação entre o genero e o usuário
+  usuario Usuario[]
+
+  @@map("tblgenero")
+}
+
+model Estado {
+  id Int @id @unique @default(autoincrement())
+
+  nome  String @db.VarChar(40)
+  sigla String @db.VarChar(2)
+
+  cidade Cidade[]
+
+  @@map("tblestado")
+}
+
+model Cidade {
+  id Int @id @unique @default(autoincrement())
+
+  nome String @db.VarChar(50)
+
+  // nome_de_controle Tabela @relation(fields: [campoDaModelAtual], references: [chavePrimariaDaOutraTabela])
+  estado   Estado @relation(fields: [idEstado], references: [id])
+  idEstado Int //declara a chave
+
+  // Dizendo ao Prisma que há uma relação de Usuário com a Cidade
+  usuario Usuario[]
+
+  @@map("tblcidade") // o map serve apenas para passar o nome para o bd
+}
