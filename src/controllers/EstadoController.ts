@@ -11,17 +11,27 @@ export default class EstadoController {
     //pega os dados do body
     const { nome, sigla }: Estado = req.body;
 
-    const newEstado = await prismaClient.estado.create({
-      data: {
-        nome,
-        sigla,
-      },
-    });
+    if (!nome)
+      return res.status(400).json({ message: "O nome é obrigatório!" });
 
-    res.status(201).json({message: "Estado criado com sucesso!",
-    newEstado
-    });
+    if (!sigla)
+      return res.status(400).json({ message: "A sigla é obrigatória!" });
+
+    try {
+      const newEstado = await prismaClient.estado.create({
+        data: {
+          nome,
+          sigla,
+        },
+      });
+
+      return res
+        .status(201)
+        .json({ message: "Estado cadastrado com sucesso", newEstado });
+        
+    } catch (error) {
+      console.error(error)
+      res.status(400).json({ message: "Não foi possível cadastrar o Estado" });
+    }
   }
-
 }
-

@@ -9,5 +9,7 @@ const router = Router();
 
 // Endpoints
 router.post("/", UsuarioController.create);
+router.post("/login", UsuarioController.login);
+router.post("/atualizar/:id", UsuarioController.update)
 
 export default router;

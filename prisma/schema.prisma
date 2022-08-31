@@ -14,8 +14,8 @@ datasource db {
 model Usuario {
   // Definindo um chave primária
   id    Int    @id @unique @default(autoincrement())
-  email String @db.VarChar(70)
-  senha String @db.VarChar(20)
+  email String @unique @db.VarChar(70)
+  senha String @db.VarChar(60)
 
   nome            String   @db.VarChar(120)
   biografia       String?  @db.Text
