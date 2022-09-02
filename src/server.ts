@@ -9,7 +9,7 @@ const app = express();
 // Configurando a API
 app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // Configurando as rotas
 import UsuarioRoutes from "./routes/UsuarioRoutes";
